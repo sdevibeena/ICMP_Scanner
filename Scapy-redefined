@@ -1,0 +1,17 @@
+from scapy.all import *
+def scapyRedefined(host, ttl_value = 20, timeout_value = 5):
+    pkt = IP(dst = host, ttl = ttl_value) / ICMP()
+    res = sr1(pkt, verbose = 0, timeout = timeout_value)
+    #print " Scanning" + host
+    if res:
+    	if res.type == 11:
+    		print('%s\ttime-exceeded for ttl - %d' %(host,ttl_value))
+    	elif res.type == 0:
+    		print('%s\tonline' %host)
+    else:
+        print('%s\tTimed out after %d' %(host,timeout_value))
+
+for i in range(1,255):
+    for j in range(1,255):
+        host = "10.41.%d.%d" %(i,j)
+        scapyRedefined(host)
